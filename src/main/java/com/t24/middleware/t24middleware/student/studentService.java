@@ -7,6 +7,7 @@ import javax.xml.bind.SchemaOutputResolver;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class studentService {
@@ -27,6 +28,10 @@ public class studentService {
     }
 
     public void addNewStudent(Student student) {
-        System.out.println(student);
+        Optional<Student> studentByEmail = studentRepository.findByEmail(student.getEmail());
+        if(studentByEmail.isPresent()){
+            throw new IllegalStateException("Email Taken");
+        }
+        studentRepository.save(student);
     }
 }
